@@ -1,0 +1,23 @@
+# Core dependencies for Feedback Analyzer AI
+# Use pip-compile to generate requirements.txt from this file
+
+# Multi-Agent Framework (latest stable versions)
+crewai
+crewai-tools
+
+# UI Framework
+streamlit
+
+# Data Processing
+pandas
+python-dotenv
+
+# Visualization
+plotly
+openpyxl
+
+# Vector Database (with specific version for compatibility)
+chromadb==0.4.24
+
+# NumPy compatibility fix (must be <2.0 for chromadb 0.4.24)
+numpy==1.26.4

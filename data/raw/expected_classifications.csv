@@ -1,0 +1,11 @@
+source_id,source_type,category,priority,technical_details,suggested_title
+REV_001,Review,Bug,High,"Crash on photo upload, Version 2.1.3",Fix crash during photo upload
+REV_002,Review,Praise,Low,None,Positive Feedback: Dark Mode
+REV_003,Review,Feature Request,Medium,PDF Export requested,Feature: PDF Export
+REV_004,Review,Spam,Low,None,Spam Review
+REV_005,Review,Complaint,Low,Pricing complaint,Pricing Feedback
+REV_006,Review,Bug,Critical,"Data sync failure, data loss",Critical: Data Sync Data Loss
+EMAIL_001,Email,Bug,Critical,"Error 503, iPhone 13 Pro, iOS 16",Login Failure: Error 503
+EMAIL_002,Email,Feature Request,Medium,Calendar View requested,Feature: Calendar View
+EMAIL_003,Email,Complaint,Low,Performance issue on Android,Refund Request / Performance
+EMAIL_004,Email,Bug,Low,"iPad Mini, Settings page font size",UI Bug: Settings Font Size

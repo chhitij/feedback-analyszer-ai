@@ -1,0 +1,5 @@
+email_id,subject,body,sender_email,timestamp,priority
+EMAIL_001,Login Issue - Critical,"Hi Support, I cannot login to my account. I keep getting 'Error 503'. I am using an iPhone 13 Pro, iOS 16. Please help ASAP as I need to access my work.",urgent@business.com,2025-11-23 11:21:49,High
+EMAIL_002,Suggestion for Improvement,"Hello, I really enjoy the app. It would be great if you could add a calendar view for the tasks. Currently the list view is a bit cluttered.",fan@gmail.com,2025-11-23 08:21:49,
+EMAIL_003,Refund Request,I want a refund. The app is too slow on my Android device.,unhappy@yahoo.com,2025-11-22 13:21:49,Low
+EMAIL_004,Bug Report: Font size,The font size on the settings page is too small on my iPad Mini. It's hard to read.,grandma@icloud.com,2025-11-21 13:21:49,Medium
