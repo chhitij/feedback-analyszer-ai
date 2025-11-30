@@ -4,6 +4,10 @@
 
 Transform thousands of user reviews and support emails into actionable tickets in minutes using 6 specialized AI agents powered by CrewAI and OpenAI GPT-4o-mini.
 
+
+https://github.com/user-attachments/assets/298d7414-e3df-47ad-b281-0ad9ec39aa35
+
+
 ---
 
 ## 📋 Table of Contents
