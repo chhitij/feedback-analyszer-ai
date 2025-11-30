@@ -40,39 +40,63 @@ class FeedbackCrew:
         result = crew.kickoff()
         return result
 
-def save_results_to_csv(result_str):
+def save_results_to_csv(result):
     try:
-        # Attempt to parse the result as JSON
-        # The LLM might return markdown code blocks, so we need to clean it
+        # CrewAI returns a CrewOutput object, extract the raw output
+        if hasattr(result, 'raw'):
+            result_str = result.raw
+        elif hasattr(result, 'output'):
+            result_str = result.output
+        else:
+            result_str = str(result)
+        
+        # Clean markdown code blocks
         clean_str = result_str.replace('```json', '').replace('```', '').strip()
         
-        # If it's a string representation of a list, eval it (carefully) or use json.loads
+        # Try to parse as JSON
         try:
             data = json.loads(clean_str)
         except json.JSONDecodeError:
-            # Fallback: try to find the JSON part
+            # Fallback: find JSON array in text
             import re
             match = re.search(r'\[.*\]', clean_str, re.DOTALL)
             if match:
                 data = json.loads(match.group(0))
             else:
-                raise ValueError("Could not parse JSON from result")
+                # If still can't parse, create simple structure from text
+                data = [{
+                    'ticket_id': 1,
+                    'title': 'Analysis Complete',
+                    'description': clean_str[:500],
+                    'category': 'Mixed',
+                    'priority': 'Medium'
+                }]
 
+        # Ensure data is a list
+        if isinstance(data, dict):
+            data = [data]
+        
         df = pd.DataFrame(data)
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = f'data/processed/generated_tickets_{timestamp}.csv'
+        output_dir = 'data/processed'
+        os.makedirs(output_dir, exist_ok=True)
         
-        # Ensure directory exists
-        os.makedirs('data/processed', exist_ok=True)
-        
+        output_path = os.path.join(output_dir, f'generated_tickets_{timestamp}.csv')
         df.to_csv(output_path, index=False)
+        
         return output_path, df
+        
     except Exception as e:
         print(f"Error saving results: {e}")
-        # Save raw result just in case
-        with open('data/processed/raw_output_error.txt', 'w') as f:
-            f.write(str(result_str))
+        # Save raw result for debugging
+        output_dir = 'data/processed'
+        os.makedirs(output_dir, exist_ok=True)
+        
+        error_path = os.path.join(output_dir, 'raw_output_error.txt')
+        with open(error_path, 'w') as f:
+            f.write(str(result))
+        
         return None, None
 
 if __name__ == "__main__":

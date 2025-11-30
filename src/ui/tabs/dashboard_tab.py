@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import time
+import os
 import plotly.express as px
 from src.main_crew import FeedbackCrew, save_results_to_csv
 
@@ -39,11 +40,16 @@ def render_dashboard_tab(reviews_df: pd.DataFrame, emails_df: pd.DataFrame):
                     log_placeholder.text("📖 Reading CSV files...")
                     progress_bar.progress(30)
                     
+                    # Get absolute paths to data files
+                    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../'))
+                    reviews_path = os.path.join(project_root, 'data/raw/app_store_reviews.csv')
+                    emails_path = os.path.join(project_root, 'data/raw/support_emails.csv')
+                    
                     crew = FeedbackCrew()
                     log_placeholder.text("🔄 Running agent analysis...")
                     progress_bar.progress(50)
                     
-                    result = crew.run('data/raw/app_store_reviews.csv', 'data/raw/support_emails.csv')
+                    result = crew.run(reviews_path, emails_path)
                     
                     log_placeholder.text("💾 Processing complete! Saving results...")
                     progress_bar.progress(80)
@@ -51,17 +57,23 @@ def render_dashboard_tab(reviews_df: pd.DataFrame, emails_df: pd.DataFrame):
                     output_path, result_df = save_results_to_csv(result)
                     progress_bar.progress(100)
                     
-                    if result_df is not None:
+                    if result_df is not None and not result_df.empty:
                         st.success(f"✅ Analysis Complete! Tickets saved to `{output_path}`")
                         st.session_state['results'] = result_df
                         log_placeholder.empty()
                         progress_bar.empty()
                     else:
-                        st.error("❌ Analysis finished but failed to parse results into CSV.")
-                        st.text_area("Raw Output", result, height=200)
+                        st.warning("⚠️ Analysis completed but no structured results. Check raw output:")
+                        # Display raw result
+                        if hasattr(result, 'raw'):
+                            st.text_area("Raw Output", result.raw, height=300)
+                        else:
+                            st.text_area("Raw Output", str(result), height=300)
                         
                 except Exception as e:
+                    import traceback
                     st.error(f"❌ An error occurred: {str(e)}")
+                    st.code(traceback.format_exc(), language="python")
                     progress_bar.empty()
                     log_placeholder.empty()
 
